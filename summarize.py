@@ -30,7 +30,7 @@ def summarize_text(text):
     summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
     
     if len(summary) > 170:
-        end_match = re.search(r'[.!?](?=[^.!?]*$)', summary[:170])
+        end_match = re.search(r'[.!?](?=[^.!?]*$)', summary[:200])
         if end_match:
             return summary[:end_match.end()]
         return summary[:170]
