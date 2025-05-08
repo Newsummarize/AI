@@ -1,20 +1,28 @@
-import json
-from timeline import summarize_timeline_by_query
-
-def read_json_file(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
+from data_handler import load_data
+from search import search_articles_vectorized
+from news_preprocessor import summarize_news, vectorize_news
+from summarizer import summarize_text
 
 def main():
-    file_path = 'data/뉴진스 어도어 분쟁_naver_news.json'  
     
-    data = read_json_file(file_path)
-    
-    result = summarize_timeline_by_query(data)
-    
-    print("뉴스 요약 타임라인")
-    print("=" * 60)
-    print(result)
+    data_path = 'data/test_news.json'
 
-if __name__ == '__main__':
+    # summarize_news(data_path)
+    # vectorize_news(data_path)
+
+    articles = load_data(data_path)
+
+    user_query = input("검색어를 입력: ")
+
+    results = search_articles_vectorized(user_query, articles, threshold=0.40)
+
+    if results:
+        print(f"\n[검색 결과]")
+        for article in results:
+            summary = summarize_text(article.get('content'), 0.1)
+            print(f"[{article.get('published_at')}] {summary}")
+    else:
+        print("\n관련 기사를 찾지 못했습니다.")
+
+if __name__ == "__main__":
     main()
