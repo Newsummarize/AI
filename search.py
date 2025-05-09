@@ -25,6 +25,9 @@ def search_articles_vectorized(query, vectorized_articles, threshold):
             if similarity >= threshold:
                 results.append((similarity, item))
 
-    # 날짜 순 정렬
-    top_results = sorted(results, key=lambda x: x[1].get('published_at', ''))
-    return [article for _, article in top_results]
+    results.sort(key=lambda x: x[0], reverse=True)
+
+    top_results = results[:10]
+
+    top_results.sort(key=lambda x: x[1].get('published_at', ''))
+    return [item for _, item in top_results]
